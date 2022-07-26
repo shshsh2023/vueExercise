@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JavaScriptLibraryMappings">
+    <file url="file://$PROJECT_DIR$" libraries="{bootstrap, bootstrap.bundle, jquery}" />
+    <file url="file://$PROJECT_DIR$/appfront" libraries="{vueExercise/appfront/node_modules}" />
+    <file url="PROJECT" libraries="{element-ui, vueExercise/appfront/node_modules}" />
+  </component>
+</project>

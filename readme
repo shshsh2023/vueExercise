@@ -1,0 +1,23 @@
+# 启动服务器
+python3 manage.py runserver 8000
+
+# 创建app
+python3 manage.py startapp login
+
+# migrate
+python3 manage.py makemigrations
+
+#  构建Vue.js前端项目
+1.安装vue-cli脚手架工具
+npm install -g vue-cli
+2. 新建一个前端工程目录
+vue-init webpack appfront
+3.进入appfront目录，安装vue所须要的node依赖
+npm install
+4. 运行项目
+npm run dev
+5.查看
+http://localhost:8080/
+
+6.vue项目打包
+npm run build
