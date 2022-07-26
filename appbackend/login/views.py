@@ -1,17 +1,11 @@
-import datetime
 import traceback
 
 import django.db.utils
-from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
-from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
-
-from login.forms import loginForm
 
 from django.contrib.auth.models import User
 from django.http import HttpResponse
-from login.models import UserExtension
+from appbackend.login.models import UserExtension
 
 
 # Create your views here.
@@ -32,8 +26,9 @@ def creatNewUser(request):
             UserExtension.objects.filter(user_id=user.id).update(age=age, sex=sex, birthday=birthday)
             # 更改调用 user.save()
             return HttpResponse('1')
-        except django.db.utils.IntegrityError:
+        except:
             traceback.print_exc()
+            print(1111)
             return HttpResponse('用户已存在')
     return HttpResponse(0)
 

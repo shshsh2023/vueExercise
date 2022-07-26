@@ -11,8 +11,8 @@
         <el-input type="password" v-model="loginForm.re_password"></el-input>
       </el-form-item>
       <el-form-item label="邮箱" prop="email">
-        <el-input type="email" v-model="loginForm.email" style="width: 250px; display: inline-block"></el-input>
-        <el-button @click="getVerifyCode" style="display: inline">获取验证码</el-button>
+        <el-input type="email" v-model="loginForm.email" style="width: 64%; display: inline-block;"></el-input>
+        <el-button @click="getVerifyCode" style="display: inline; width: 34%;">获取验证码</el-button>
       </el-form-item>
       <el-form-item label="验证码" prop="verifyCode">
         <el-input v-model="loginForm.verifyCode"></el-input>
@@ -134,10 +134,13 @@ export default {
       }
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
-          axios.post('http://127.0.0.1:8000/lg/creatNewUser/', formData, function (data) {
-            console.log(data)
-          })
-          alert('submit')
+          axios.post('/lg/creatNewUser/', formData)
+            .then(function (response) {
+              alert(response.data)
+            })
+            .catch(function (error) {
+              console.log(error)
+            })
         } else {
           console.log('error submit!')
           return false

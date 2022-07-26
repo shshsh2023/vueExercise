@@ -4,7 +4,7 @@
 # @File    : urls.py
 # @Software: PyCharm
 from django.urls import path
-from login import views
+from appbackend.login import views
 
 
 urlpatterns = [
