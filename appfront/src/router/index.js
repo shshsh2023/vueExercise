@@ -36,19 +36,19 @@ const router = new Router({
       },
       children: [
         {
-          path: '/register',
-          name: 'Register',
-          component: Register,
-          meta: {
-            title: '注册'
-          }
-        },
-        {
           path: '/login',
           name: 'Login',
           component: Login,
           meta: {
             title: '登录'
+          }
+        },
+        {
+          path: '/register',
+          name: 'Register',
+          component: Register,
+          meta: {
+            title: '注册'
           }
         }
       ]

@@ -12,10 +12,16 @@
       </el-form-item>
       <el-form-item label="邮箱" prop="email">
         <el-input type="email" v-model="loginForm.email" style="width: 64%; display: inline-block;"></el-input>
-        <el-button @click="getVerifyCode" style="display: inline; width: 34%;">获取验证码</el-button>
+        <el-button @click="getVerifyCode" style="display: inline-block; width: 34%;">获取验证码</el-button>
       </el-form-item>
       <el-form-item label="验证码" prop="verifyCode">
         <el-input v-model="loginForm.verifyCode"></el-input>
+      </el-form-item>
+      <el-form-item label="姓" prop="firstName">
+        <el-input v-model="loginForm.firstName"></el-input>
+      </el-form-item>
+      <el-form-item label="名" prop="lastName">
+        <el-input v-model="loginForm.lastName"></el-input>
       </el-form-item>
       <el-form-item label="年龄" prop="age">
         <el-input type="age" v-model.number="loginForm.age"></el-input>
@@ -30,7 +36,7 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submitForm('loginForm')">提交</el-button>
+        <el-button type="primary" @click="submitForm()">注册</el-button>
         <el-button @click="resetForm('loginForm')">重置</el-button>
       </el-form-item>
     </el-form>
@@ -71,6 +77,8 @@ export default {
         re_password: '',
         email: '',
         verifyCode: '',
+        firstName: '',
+        lastName: '',
         age: '',
         sex: ''
       },
@@ -112,7 +120,7 @@ export default {
     }
   },
   methods: {
-    submitForm (formName) {
+    submitForm () {
       let formData = new FormData()
       for (const key in this.loginForm) {
         if (key === 'birthday') {
@@ -136,7 +144,10 @@ export default {
         if (valid) {
           axios.post('/lg/creatNewUser/', formData)
             .then(function (response) {
-              alert(response.data)
+              if (response.data === '注册成功') {
+                alert('注册成功，即将返回登录界面！')
+                location.href = '/login'
+              }
             })
             .catch(function (error) {
               console.log(error)
@@ -148,11 +159,13 @@ export default {
       })
     },
     resetForm (formName) {
+      // 下面两种都可以
       this.$refs.loginForm.resetFields()
+      // this.$refs[formName].resetFields()
     },
     getVerifyCode () {
-      console.log(typeof this.loginForm['email'])
-      axios.post('http://127.0.0.1:8000/lg/getVerifyCode/', {email: this.loginForm['email']})
+      console.log(this.loginForm['email'])
+      axios.post('/lg/getVerifyCode/', { 'email': this.loginForm['email'] })
     }
   }
 }

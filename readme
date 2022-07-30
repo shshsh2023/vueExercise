@@ -21,3 +21,6 @@ http://localhost:8080/
 
 6.vue项目打包
 npm run build
+
+
+采用session存储验证码
