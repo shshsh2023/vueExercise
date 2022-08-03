@@ -24,3 +24,9 @@ npm run build
 
 
 采用session存储验证码
+
+查看appbackend的各个模块的apps.py的文件名是否正确
+例如：
+class LoginConfig(AppConfig):
+    default_auto_field = 'django.db.models.BigAutoField'
+    name = 'appbackend.login'

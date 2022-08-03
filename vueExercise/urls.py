@@ -20,4 +20,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('lg/', include("appbackend.login.urls")),
+    path('vc/', include('appbackend.verifications.urls'))
 ]

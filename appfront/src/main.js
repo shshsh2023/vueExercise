@@ -13,8 +13,8 @@ Vue.config.productionTip = false
 Vue.use(ElementUI)
 
 // 配置axios的默认路由
-Vue.prototype.$axios = axios
-axios.defaults.baseURL = 'http://127.0.0.1:8000'
+Vue.prototype.$http = axios
+axios.defaults.baseURL = 'http://127.0.0.1:8000/'
 Vue.use(VueAxios, axios)
 
 /* eslint-disable no-new */

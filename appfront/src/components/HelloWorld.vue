@@ -1,41 +1,49 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
-    <h1>{{ msg1 }}</h1>
-    <h2>你好,世界!</h2>
-    <div>
-      {{ msg2 }}
-    </div>
+    <h2>你好，{{ username }}</h2>
+    <el-button @click="logout">注销</el-button>
   </div>
 </template>
 
 <script>
+
 export default {
   name: 'HelloWorld',
   data () {
     return {
-      msg: 'Welcome to My App',
-      msg1: '哈哈哈',
-      msg2: '哦哦哦'
+      username: '',
+      msg: 'Welcome to My App'
     }
+  },
+  methods: {
+    logout () {
+      this.$http.post('/lg/logout/', this.username)
+        .then(function (response) {
+          if (response.data === '注销成功') {
+            alert('注销成功')
+            window.sessionStorage.removeItem('username')
+            window.location.href = '/login'
+          }
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+    },
+    getUser () {
+      this.username = window.sessionStorage.getItem('username')
+    }
+  },
+  mounted () {
+    this.$nextTick(function () {
+      console.log(window.sessionStorage.getItem('username'))
+      this.getUser()
+    })
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1, h2 {
-  font-weight: normal;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+
 </style>

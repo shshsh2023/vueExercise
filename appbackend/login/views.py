@@ -1,19 +1,29 @@
 import json
+import random
 import smtplib
 import traceback
-import random
 
-import django.db.utils
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 from django.core.cache import cache
+from django.core.mail import send_mail
+from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from django.contrib.auth.models import User
-from django.http import HttpResponse
 from appbackend.login.models import UserExtension
-from django.core.mail import send_mail
 
 
 # Create your views here.
+# 生成六位数字验证码
+def generateVerifyCode():
+    verifyCode = ''
+    for i in range(6):
+        verifyCode += str(random.randint(0, 10))
+    cache.set('verifyCode', verifyCode, 60 * 10)
+    verifyCodeMsg = '你的验证码为:' + verifyCode + ',十分钟内有效!'
+    return verifyCodeMsg
+
+
 @csrf_exempt
 def creatNewUser(request):
     if request.method == 'POST':
@@ -31,6 +41,7 @@ def creatNewUser(request):
             return HttpResponse('两次密码不相同')
         try:
             if verifyCode == cache.get('verifyCode'):
+                cache.delete('verifyCode')
                 user = User.objects.create_user(username=username, password=password, email=email,
                                                 first_name=firstName, last_name=lastName)
                 # 给扩展的字段设置值
@@ -65,15 +76,35 @@ def getVerifyCode(request):
 
 # 登录
 @csrf_exempt
-def login(request):
-    pass
+def authLogin(request):
+    if request.method == 'POST':
+        body = json.loads(request.body)
+        username = body['username']
+        password = body['password']
+        code = body['code']
+        try:
+            if code == cache.get('imageVerifyCode').lower():
+                cache.delete('imageVerifyCode')
+                authUser = authenticate(username=username, password=password)
+                if authUser is not None:
+                    login(request, authUser)
+                    request.session['username'] = username
+                    request.session['is_login'] = True
+                    return HttpResponse('登录成功')
+                else:
+                    return HttpResponse('登录失败')
+            else:
+                return HttpResponse('验证码错误')
+        except AttributeError:
+            return HttpResponse('刷新验证码')
+    return HttpResponse('登录失败')
 
 
-# 生成六位数字验证码
-def generateVerifyCode():
-    verifyCode = ''
-    for i in range(6):
-        verifyCode += str(random.randint(0, 10))
-    cache.set('verifyCode', verifyCode, 60*10)
-    verifyCodeMsg = '你的验证码为:' + verifyCode + ',十分钟内有效!'
-    return verifyCodeMsg
+# 登出
+@csrf_exempt
+def authLogout(request):
+    if request.method == 'POST':
+        request.session.flush()
+        logout(request)
+        return HttpResponse('注销成功')
+    return HttpResponse('0')

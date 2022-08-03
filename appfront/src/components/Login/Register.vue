@@ -1,43 +1,43 @@
 <template>
   <div id="Register">
-    <el-form :model="loginForm" :rules="rules" label-width="80px" ref="loginForm" class="loginForm">
+    <el-form :model="registerForm" :rules="rules" label-width="80px" ref="registerForm" class="registerForm">
       <el-form-item label="用户名" prop="username">
-        <el-input v-model="loginForm.username"></el-input>
+        <el-input v-model="registerForm.username"></el-input>
       </el-form-item>
       <el-form-item label="密码" prop="password">
-        <el-input type="password" v-model="loginForm.password" ref="password"></el-input>
+        <el-input type="password" v-model="registerForm.password" ref="password"></el-input>
       </el-form-item>
       <el-form-item label="重复密码" prop="re_password">
-        <el-input type="password" v-model="loginForm.re_password"></el-input>
+        <el-input type="password" v-model="registerForm.re_password"></el-input>
       </el-form-item>
       <el-form-item label="邮箱" prop="email">
-        <el-input type="email" v-model="loginForm.email" style="width: 64%; display: inline-block;"></el-input>
+        <el-input type="email" v-model="registerForm.email" style="width: 64%; display: inline-block;"></el-input>
         <el-button @click="getVerifyCode" style="display: inline-block; width: 34%;">获取验证码</el-button>
       </el-form-item>
       <el-form-item label="验证码" prop="verifyCode">
-        <el-input v-model="loginForm.verifyCode"></el-input>
+        <el-input v-model="registerForm.verifyCode"></el-input>
       </el-form-item>
       <el-form-item label="姓" prop="firstName">
-        <el-input v-model="loginForm.firstName"></el-input>
+        <el-input v-model="registerForm.firstName"></el-input>
       </el-form-item>
       <el-form-item label="名" prop="lastName">
-        <el-input v-model="loginForm.lastName"></el-input>
+        <el-input v-model="registerForm.lastName"></el-input>
       </el-form-item>
       <el-form-item label="年龄" prop="age">
-        <el-input type="age" v-model.number="loginForm.age"></el-input>
+        <el-input type="age" v-model.number="registerForm.age"></el-input>
       </el-form-item>
       <el-form-item label="生日" prop="birthday">
-        <el-date-picker type="date" v-model="loginForm.birthday" placeholder="选择日期"></el-date-picker>
+        <el-date-picker type="date" v-model="registerForm.birthday" placeholder="选择日期"></el-date-picker>
       </el-form-item>
       <el-form-item label="性别" prop="sex">
-        <el-radio-group v-model="loginForm.sex" size="small">
+        <el-radio-group v-model="registerForm.sex" size="small">
           <el-radio-button border label="男"></el-radio-button>
           <el-radio-button border label="女"></el-radio-button>
         </el-radio-group>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submitForm()">注册</el-button>
-        <el-button @click="resetForm('loginForm')">重置</el-button>
+        <el-button @click="resetForm('registerForm')">重置</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -71,7 +71,7 @@ export default {
       }
     }
     return {
-      loginForm: {
+      registerForm: {
         username: '',
         password: '',
         re_password: '',
@@ -122,9 +122,9 @@ export default {
   methods: {
     submitForm () {
       let formData = new FormData()
-      for (const key in this.loginForm) {
+      for (const key in this.registerForm) {
         if (key === 'birthday') {
-          let bir = this.loginForm[key]
+          let bir = this.registerForm[key]
           let year = bir.getFullYear()
           let month = bir.getMonth()
           let day = bir.getDay()
@@ -137,10 +137,10 @@ export default {
           let birthday = year + '-' + month + '-' + day
           formData.append(key, birthday)
         } else {
-          formData.append(key, this.loginForm[key])
+          formData.append(key, this.registerForm[key])
         }
       }
-      this.$refs.loginForm.validate((valid) => {
+      this.$refs.registerForm.validate((valid) => {
         if (valid) {
           axios.post('/lg/creatNewUser/', formData)
             .then(function (response) {
@@ -160,12 +160,12 @@ export default {
     },
     resetForm (formName) {
       // 下面两种都可以
-      this.$refs.loginForm.resetFields()
+      this.$refs.registerForm.resetFields()
       // this.$refs[formName].resetFields()
     },
     getVerifyCode () {
-      console.log(this.loginForm['email'])
-      axios.post('/lg/getVerifyCode/', { 'email': this.loginForm['email'] })
+      console.log(this.registerForm['email'])
+      axios.post('/lg/getVerifyCode/', { 'email': this.registerForm['email'] })
     }
   }
 }
